@@ -70,16 +70,10 @@
         </exclusions>
     </dependency>
 
-    <!-- Databases - Uses H2 by default -->
-    <dependency>
-      <groupId>com.h2database</groupId>
-      <artifactId>h2</artifactId>
-      <scope>runtime</scope>
-    </dependency>
+    <!-- Databases - Uses MYSQL by default -->
     <dependency>
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
-      <scope>runtime</scope>
     </dependency>
 
     <!-- caching -->
