@@ -3,38 +3,37 @@ pipeline {
 
     tools {
         // Install the Maven version configured as "M3" and add it to the path.
-        maven "apache-maven-3.6.3"
+        maven "Maven"
     }
     environment{
         NEXUS_VERSION = "nexus3"
         NEXUS_PROTOCOL = "http"
-        NEXUS_URL = "you-ip-addr-here:8081"
+        NEXUS_URL = "localhost:8081"
         NEXUS_REPOSITORY = "maven-nexus-repo"
         NEXUS_CREDENTIAL_ID = "nexus-user-credentials"
         
     }
     stages{
-      stage("Clone code from VCS"){
-          steps{
-            script{
-              git 'github.com/oziel-cyber/spring-petclinic.git';
-        }
-      }
-     }
-    }
-    stage("Maven Build"){
-        steps{
-            script{
+      //  stage("Clone code from VCS"){
+        //  steps{
+          //  script{
+            //  git 'https://github.com/oziel-cyber/spring-petclinic.git';
+        //}
+     // }
+     //}
+        stage("Maven Build"){
+            steps{
+                script{
                 sh "mvn package -DskipTests=true"
             }
         }
     }
-    stage("Publish to Nexus Repository Manager") {
+        stage("Publish to Nexus Repository Manager") {
             steps {
                 script {
                     pom = readMavenPom file: "pom.xml";
                     filesByGlob = findFiles(glob: "target/*.${pom.packaging}");
-                    echo "${filesByGlob[0].name} ${filesByGlob[0].path} ${filesByGlob[0].directory} ${filesByGlob[0].length} ${filesByGlob[0].lastModified}"
+                    echo "${filesByGlob[1].name} ${filesByGlob[0].path} ${filesByGlob[0].directory} ${filesByGlob[0].length} ${filesByGlob[0].lastModified}"
                     artifactPath = filesByGlob[0].path;
                     artifactExists = fileExists artifactPath;
                     if(artifactExists) {
@@ -65,3 +64,4 @@ pipeline {
             }
         }
     }
+}
