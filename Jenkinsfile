@@ -17,7 +17,7 @@ pipeline {
         stage("Clone code from VCS"){
           steps{
             script{
-             git clone 'https://github.com/oziel-cyber/spring-petclinic.git';
+             git pull'https://github.com/oziel-cyber/spring-petclinic.git';
         }
      }
      }
