@@ -21,7 +21,7 @@ pipeline {
         //}
      //}
      //}
-        stage("Maven Build"){
+        stage("Maven Build"){h
             steps{
                 sh "mvn package -DskipTests=true"
             }
@@ -35,7 +35,7 @@ pipeline {
                     artifactPath = filesByGlob[0].path;
                     artifactExists = fileExists artifactPath;
                     if(artifactExists) {
-                        echo "*** File: ${artifactPath}, group: org.springframework.samples , packaging: jar , version : 2.4.2";
+                        echo "*** File: ${artifactPath}, group: org.springframework.samples , packaging: jar , version 2.4.2";
                         nexusArtifactUploader(
                             nexusVersion: NEXUS_VERSION,
                             protocol: NEXUS_PROTOCOL,
