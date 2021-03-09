@@ -1,5 +1,7 @@
 pipeline {
-    agent any
+    agent any{
+        label "main"
+    }
 
     tools {
         // Install the Maven version configured as "M3" and add it to the path.
