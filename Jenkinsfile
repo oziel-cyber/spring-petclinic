@@ -14,13 +14,13 @@ pipeline {
         
     }
     stages{
-        stage("Clone code from VCS"){
-          steps{
-            script{
-             git pull'https://github.com/oziel-cyber/spring-petclinic.git';
-        }
-     }
-     }
+        //stage("Clone code from VCS"){
+          //steps{
+            //script{
+             //git'https://github.com/oziel-cyber/spring-petclinic.git';
+        //}
+     //}
+     //}
         stage("Maven Build"){
             steps{
                 script{
