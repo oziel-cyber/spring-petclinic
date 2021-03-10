@@ -30,7 +30,7 @@ pipeline {
             steps {
                 script {
                     //pom = readMavenPom file: "pom.xml";
-                    filesByGlob = findFiles(glob: "target/spring-petclinic-2.4.2.jar");
+                    filesByGlob = findFiles(glob: "target/spring-petclinic-2.4.2*.jar");
                     echo "${filesByGlob[0].name} ${filesByGlob[0].path} ${filesByGlob[0].directory} ${filesByGlob[0].length} ${filesByGlob[0].lastModified}"
                     artifactPath = filesByGlob[0].path;
                     artifactExists = fileExists artifactPath;
@@ -38,7 +38,7 @@ pipeline {
                         echo "*** File: ${artifactPath}, group: org.springframework.samples , packaging: jar , version 2.4.2";
                         nexusArtifactUploader(
                             nexusVersion: NEXUS_VERSION,
-                            protocol: NEXUS_PROTOCOL,
+                            protocol: NEXUS_PROTOCOL, 
                             nexusUrl: NEXUS_URL,
                             groupId: org.springframework.samples,
                             version: "2.4.2",
