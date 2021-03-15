@@ -30,7 +30,7 @@ pipeline {
             steps {
                 script {
                     //pom = readMavenPom file: "pom.xml";
-                    def filesByGlob = findFiles(glob: "target/spring-petclinic-2.4.2.jar");
+                    def filesByGlob = findFiles(glob: "./target/spring-petclinic-2.4.2.jar");
                     echo "${filesByGlob[0].name} ${filesByGlob[0].path} ${filesByGlob[0].directory} ${filesByGlob[0].length} ${filesByGlob[0].lastModified}";
                     artifactPath = filesByGlob[0].path;
                     artifactExists = fileExists artifactPath;
