@@ -28,8 +28,8 @@ pipeline {
         }
        stage('sonar-scanner analysis') {
       def sonarqubeScannerHome = tool name: 'sonar-scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
-      withCredentials([string(credentialsId: '2f342910c7a2a976d734db0e9d122cef58ea10237b795c759095311c4156b17b', variable: 'e06fe7b117b183f1360431c59148553bb6a16b0b')]) {
-        sh "${sonarqubeScannerHome}/bin/sonar-scanner -X -Dsonar.host.url=http://sonarqube:9000 -Dsonar.login=${sonarLogin} -Dsonar.projectName=${env.JOB_NAME} -Dsonar.projectVersion=${env.BUILD_NUMBER} -Dsonar.projectKey=2f342910c7a2a976d734db0e9d122cef58ea10237b795c759095311c4156b17b  -Dsonar.sources=src/main/java -Dsonar.java.libraries=target/* -Dsonar.java.binaries=target/classes -Dsonar.language=java"
+      withCredentials([string(credentialsId: 'sonar', variable: 'sonarLogin')]) {
+        sh "${sonarqubeScannerHome}/bin/sonar-scanner -X -Dsonar.host.url=http://sonarqube:9000 -Dsonar.login=e06fe7b117b183f1360431c59148553bb6a16b0b -Dsonar.projectName=My Sonarqube -Dsonar.projectVersion=${env.BUILD_NUMBER} -Dsonar.projectKey=2f342910c7a2a976d734db0e9d122cef58ea10237b795c759095311c4156b17b  -Dsonar.sources=src/main/java -Dsonar.java.libraries=target/* -Dsonar.java.binaries=target/classes -Dsonar.language=java"
       }
     sh "sleep 40"
     env.WORKSPACE = pwd()
