@@ -26,11 +26,25 @@ pipeline {
                 sh "mvn package -DskipTests=true"
             }
         }
+        stage("SonarQube Code Quality"){
+            steps{
+                withSonarQubeEnv('My SonarQube Server '){
+                    sh 'mvn clean package sonar:sonar'
+                }
+            }
+        }
+        stage ("Quality Gate"){
+            steps{
+                timeout(time:1, unit: 'HOURS'){
+                    waitForQualityGate abortPipeline:true
+                }
+            }
+        }
         stage("Publish to Nexus Repository Manager") {
             steps {
                 script {
                     //pom = readMavenPom file: "pom.xml";
-                    def filesByGlob = findFiles(glob: "./target/spring-petclinic-2.4.2.jar");
+                    filesByGlob = findFiles(glob: "./target/spring-petclinic-2.4.2.jar");
                     echo "${filesByGlob[0].name} ${filesByGlob[0].path} ${filesByGlob[0].directory} ${filesByGlob[0].length} ${filesByGlob[0].lastModified}";
                     artifactPath = filesByGlob[0].path;
                     artifactExists = fileExists artifactPath;
