@@ -31,7 +31,7 @@ pipeline {
                 withSonarQubeEnv('My SonarQube Server') {
                     // Optionally use a Maven environment you've configured already
                     withMaven(maven:'M3') {
-                        sh 'mvn clean package sonar:sonar'
+                        sh 'mvn package sonar:sonar -DskipTests=true'
                     }
                 }
             }
