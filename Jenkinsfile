@@ -30,7 +30,7 @@ pipeline {
             steps {
                 withSonarQubeEnv('My SonarQube Server') {
                     // Optionally use a Maven environment you've configured already
-                    withMaven(maven:'Maven 3.5') {
+                    withMaven(maven:'M3') {
                         sh 'mvn clean package sonar:sonar'
                     }
                 }
@@ -41,7 +41,7 @@ pipeline {
                 timeout(time: 1, unit: 'HOURS') {
                     // Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails
                     // true = set pipeline to UNSTABLE, false = don't
-                    waitForQualityGate abortPipeline: true
+                    waitForQualityGate(webhookSecretId: 'dbaba9d3bad5c5010cfbe3d9500ea1ae826ebb43')
                 }
             }
         }
