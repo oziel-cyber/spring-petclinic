@@ -26,32 +26,26 @@ pipeline {
                 sh "mvn package -DskipTests=true"
             }
         }
-       stage('sonar-scanner analysis') {
-      def sonarqubeScannerHome = tool name: 'sonar-scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
-      withCredentials([string(credentialsId: 'sonar', variable: 'sonarLogin')]) {
-        sh "${sonarqubeScannerHome}/bin/sonar-scanner -X -Dsonar.host.url=http://sonarqube:9000 -Dsonar.login=e06fe7b117b183f1360431c59148553bb6a16b0b -Dsonar.projectName=My Sonarqube -Dsonar.projectVersion=${env.BUILD_NUMBER} -Dsonar.projectKey=2f342910c7a2a976d734db0e9d122cef58ea10237b795c759095311c4156b17b  -Dsonar.sources=src/main/java -Dsonar.java.libraries=target/* -Dsonar.java.binaries=target/classes -Dsonar.language=java"
-      }
-    sh "sleep 40"
-    env.WORKSPACE = pwd()
-    def file = readFile "${env.WORKSPACE}/.scannerwork/report-task.txt"
-    echo file.split("\n")[5]
-    
-    def resp = httpRequest file.split("\n")[5].split("l=")[1]
-    
-    ceTask = readJSON text: resp.content
-    echo ceTask.toString()
-    
-    def response2 = httpRequest url : 'http://localhost:9000' + "/api/qualitygates/project_status?analysisId=" + ceTask["task"]["analysisId"]
-    def qualitygate =  readJSON text: response2.content
-    echo qualitygate.toString()
-    if ("ERROR".equals(qualitygate["projectStatus"]["status"])) {
-        echo "Build Failed"
+        stage('build && SonarQube analysis') {
+            steps {
+                withSonarQubeEnv('My SonarQube Server') {
+                    // Optionally use a Maven environment you've configured already
+                    withMaven(maven:'Maven 3.5') {
+                        sh 'mvn clean package sonar:sonar'
+                    }
+                }
+            }
         }
-       else {
-        echo "Build Passed"
-    //   build_job("Trigger the delivery job")		
-         }
+            stage("Quality Gate") {
+            steps {
+                timeout(time: 1, unit: 'HOURS') {
+                    // Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails
+                    // true = set pipeline to UNSTABLE, false = don't
+                    waitForQualityGate abortPipeline: true
+                }
+            }
         }
+    
         stage("Publish to Nexus Repository Manager") {
             steps {
                 script {
